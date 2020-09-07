@@ -12,7 +12,7 @@ parser.add_argument("--keep", action="store_true")
 parser.add_argument("tests", metavar="TEST", nargs="*")
 args = parser.parse_args()
 
-run(["npm", "pack", ".."], shell=True, check=True)
+run("npm pack ..", shell=True, check=True)
 version = json.load(open("../package.json"))["version"]
 original_cwd = Path.cwd()
 
@@ -29,16 +29,16 @@ for test_dir in Path(__file__).parent.iterdir():
 
     print(" *** TESTING", test_dir.name)
 
-    run(["npm", "install", "--no-save", f"../serverless-pydeps-{version}.tgz"], shell=True, check=True)
+    run(f"npm install --no-save ../serverless-pydeps-{version}.tgz", shell=True, check=True)
 
     if args.deploy:
         try:
-            run(["sls", "deploy"], shell=True, check=True)
+            run("sls deploy", shell=True, check=True)
             for function in yaml.load(open("serverless.yml"), Loader=yaml.BaseLoader)["functions"]:
-                run(["sls", "invoke", "--function", function, "--log"], shell=True, check=True)
+                run(f"sls invoke --function {function} --log", shell=True, check=True)
         finally:
             if not args.keep:
-                run(["sls", "remove"], shell=True)
+                run("sls remove", shell=True)
 
     else:
-        run(["sls", "package"], shell=True, check=True)
+        run("sls package", shell=True, check=True)
