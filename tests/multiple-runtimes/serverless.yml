@@ -1,0 +1,27 @@
+service: multiple-runtimes
+
+plugins:
+  - serverless-pydeps
+
+package:
+  exclude:
+    - node_modules/**
+    - package*.json
+    - serverless.yml
+    - requirements.txt
+
+provider:
+  name: aws
+  runtime: python3.7
+
+functions:
+  test36:
+    handler: handler.test36
+    runtime: python3.6
+
+  test37-default:
+    handler: handler.test37
+
+  test37:
+    handler: handler.test37
+    runtime: python3.7

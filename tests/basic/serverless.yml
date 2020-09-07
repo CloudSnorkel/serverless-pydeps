@@ -1,0 +1,19 @@
+service: basic
+
+plugins:
+  - serverless-pydeps
+
+package:
+  exclude:
+    - node_modules/**
+    - package*.json
+    - serverless.yml
+    - requirements.txt
+
+provider:
+  name: aws
+  runtime: python3.7
+
+functions:
+  test:
+    handler: handler.test

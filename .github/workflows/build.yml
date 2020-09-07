@@ -1,0 +1,70 @@
+name: Build and Publish
+
+on: push
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Node 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Dependencies
+        run: |
+          pip install pyyaml
+          npm install -g serverless
+      - name: Test
+        run: |
+          cd tests
+          python test.py
+
+  release:
+    name: Release
+    needs: build
+    if: startsWith(github.event.ref, 'refs/tags')
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Node 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+          registry-url: https://registry.npmjs.org/
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Version ${{ github.ref }}
+          body: ""  # TODO get git commit messages here automatically
+          draft: true
+          prerelease: false
+      - name: Build
+        run: |
+          npm pack
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./serverless-pydeps-${{ github.ref }}.tgz
+          asset_name: serverless-pydeps-${{ github.ref }}.tgz
+          asset_content_type: application/tar+gzip
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

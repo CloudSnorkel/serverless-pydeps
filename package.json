@@ -1,0 +1,45 @@
+{
+  "name": "serverless-pydeps",
+  "version": "0.0.1",
+  "description": "Serverless Python Dependencies Plugin",
+  "engines": {
+    "node": ">=10.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "packager.py",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CloudSnorkel/serverless-pydeps.git"
+  },
+  "author": "CloudSnorkel",
+  "license": "MIT",
+  "keywords": [
+    "serverless",
+    "python",
+    "requirements",
+    "pip",
+    "pipenv",
+    "serverless framework plugin",
+    "serverless applications",
+    "serverless plugins",
+    "lambda",
+    "aws",
+    "aws lambda",
+    "amazon",
+    "amazon web services",
+    "serverless.com"
+  ],
+  "bugs": {
+    "url": "https://github.com/CloudSnorkel/serverless-pydeps/issues"
+  },
+  "homepage": "https://github.com/CloudSnorkel/serverless-pydeps#readme"
+}
