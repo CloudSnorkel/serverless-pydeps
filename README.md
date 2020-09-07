@@ -1,10 +1,10 @@
 # Serverless Python Dependencies
 
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![serverless](assets/serverless.svg?raw=true)](https://www.serverless.com)
 [![Github Actions](https://github.com/CloudSnorkel/serverless-pydeps/workflows/Build%20and%20Publish/badge.svg)](https://github.com/CloudSnorkel/serverless-pydeps/actions)
 [![npm](https://img.shields.io/npm/v/serverless-pydeps.svg)](https://www.npmjs.com/package/serverless-pydeps)
 
-[Serverless Framework](http://www.serverless.com/) plugin to automatically add Python dependencies as layers to your functions. 
+[Serverless Framework](https://www.serverless.com/) plugin to automatically add Python dependencies as layers to your functions. 
 
 Based on [Lovage](https://github.com/CloudSnorkel/lovage) - a Python-only serverless library that's more RPC-like and
 less HTTP service oriented.
