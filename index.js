@@ -13,7 +13,7 @@ class ServerlessPydeps {
         this.provider = this.serverless.getProvider('aws');
 
         this.hooks = {
-            'after:package:setupProviderConfiguration': this.addDependencies.bind(this),
+            'after:package:compileFunctions': this.addDependencies.bind(this),
         };
 
         // code for special Lambda that packages up dependencies and uploads to S3

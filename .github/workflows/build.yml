@@ -1,12 +1,17 @@
 name: Build and Publish
 
-on: push
+on: [push, pull_request]
 
 jobs:
   test:
     name: Test
 
     runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        sls-version: [ ^1.0.0, ^2.0.0, latest ]
+
     steps:
       - uses: actions/checkout@master
       - name: Set up Node 10
@@ -20,7 +25,7 @@ jobs:
       - name: Dependencies
         run: |
           pip install pyyaml
-          npm install -g serverless
+          npm install -g serverless@${{ matrix.sls-version }}
       - name: Test
         run: |
           cd tests
