@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from os import chdir
 from pathlib import Path
 from subprocess import run
+from sys import exit
 
 import yaml
 
@@ -42,3 +43,13 @@ for test_dir in Path(__file__).parent.iterdir():
 
     else:
         run("sls package", shell=True, check=True)
+        template = json.load(open(".serverless/cloudformation-template-update.json"))["version"]
+        for r in template["Resources"]:
+            if r["Type"] != "AWS::Lambda::Function":
+                continue
+            function_name = r["Properties"].get("FunctionName", "")
+            if function_name.endswith("-packager"):
+                continue
+            if not r["Properties"].get("Layers"):
+                print(f"{function_name} missing layers")
+                exit(1)
