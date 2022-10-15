@@ -1,6 +1,6 @@
 {
   "name": "serverless-pydeps",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Serverless Python Dependencies Plugin",
   "engines": {
     "node": ">=10.0"
