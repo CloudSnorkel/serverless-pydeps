@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        sls-version: [ ^1.0.0, ^2.0.0, latest ]
+        sls-version: [ ^1.0.0, ^2.0.0, ^3.0.0, latest ]
 
     steps:
       - uses: actions/checkout@master

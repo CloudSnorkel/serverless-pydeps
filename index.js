@@ -28,26 +28,23 @@ class ServerlessPydeps {
         const runtimes = new Set();
 
         // go over all functions and look for functions using Python runtime
-        for (const functionName of this.serverless.service.getAllFunctions()) {
-            const functionObject = this.serverless.service.getFunction(functionName);
-            const runtime = this.sanitizeRuntime(this.provider.getRuntime(functionObject.runtime));
+        for (const resource of Object.values(this.serverless.service.provider.compiledCloudFormationTemplate.Resources)) {
+            if (resource.Type !== "AWS::Lambda::Function") {
+                continue;
+            }
 
+            const runtime = this.sanitizeRuntime(resource.Properties.Runtime);
             if (runtime.startsWith('Python')) {
                 // collect all different runtimes that are used
                 runtimes.add(runtime);
 
-                if (functionObject.layers && Array.isArray(functionObject.layers)) {
-                    // already has layers, nothing to initialize
-                } else if (this.serverless.service.provider.layers && Array.isArray(this.serverless.service.provider.layers)) {
-                    // copy layers from provider so we don't override them
-                    functionObject.layers = Array.from(this.serverless.service.provider.layers)
-                } else {
+                if (resource.Properties.Layers === undefined) {
                     // no layers at all, define empty array
-                    functionObject.layers = [];
+                    resource.Properties.Layers = [];
                 }
 
                 // add our layer to each function that uses Python
-                functionObject.layers.push({'Ref': `${runtime}DependenciesLayer`});
+                resource.Properties.Layers.push({'Ref': `${runtime}DependenciesLayer`});
             }
         }
 
