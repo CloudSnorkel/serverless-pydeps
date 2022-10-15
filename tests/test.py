@@ -5,8 +5,6 @@ from pathlib import Path
 from subprocess import run
 from sys import exit
 
-import yaml
-
 parser = ArgumentParser()
 parser.add_argument("--deploy", action="store_true")
 parser.add_argument("--keep", action="store_true")
@@ -33,6 +31,8 @@ for test_dir in Path(__file__).parent.iterdir():
     run(f"npm install --no-save ../serverless-pydeps-{version}.tgz", shell=True, check=True)
 
     if args.deploy:
+        import yaml
+
         try:
             run("sls deploy", shell=True, check=True)
             for function in yaml.load(open("serverless.yml"), Loader=yaml.BaseLoader)["functions"]:
@@ -43,13 +43,13 @@ for test_dir in Path(__file__).parent.iterdir():
 
     else:
         run("sls package", shell=True, check=True)
-        template = json.load(open(".serverless/cloudformation-template-update.json"))["version"]
-        for r in template["Resources"]:
+        template = json.load(open(".serverless/cloudformation-template-update-stack.json"))
+        for r in template["Resources"].values():
             if r["Type"] != "AWS::Lambda::Function":
                 continue
             function_name = r["Properties"].get("FunctionName", "")
             if function_name.endswith("-packager"):
                 continue
             if not r["Properties"].get("Layers"):
-                print(f"{function_name} missing layers")
+                print(f"{function_name} function missing layer")
                 exit(1)
