@@ -18,12 +18,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: npm
       - name: Set up Python 3.7
         uses: actions/setup-python@v4
         with:
           python-version: 3.7
-          cache: pip
       - name: Dependencies
         run: |
           pip install pyyaml
@@ -46,7 +44,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: npm
           registry-url: https://registry.npmjs.org/
       - name: Get version
         id: get_version
